@@ -1,6 +1,7 @@
 package com.example.exam.controller;
 
 import com.example.exam.dto.PatientDTO;
+import com.example.exam.dto.ReportPatientDTO;
 import com.example.exam.service.PatientService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,11 @@ public class PatientController {
     @GetMapping("/{id}")
     public PatientDTO getPatient(@PathVariable Long id) {
         return service.getPatientById(id);
+    }
+
+    @GetMapping("/{id}/report")
+    public ReportPatientDTO getReport(@PathVariable Long id) {
+        return service.getReportById(id);
     }
 
     @PostMapping

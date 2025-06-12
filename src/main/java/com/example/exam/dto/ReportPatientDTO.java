@@ -6,7 +6,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PatientDTO { // DTO for creating a patient and getting basic information
+public class ReportPatientDTO { // DTO for all information about a patient
     private String name;
     private String diagnosis;
+    private String createdAt;
 }

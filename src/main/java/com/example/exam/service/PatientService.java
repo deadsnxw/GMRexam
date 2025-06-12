@@ -1,6 +1,7 @@
 package com.example.exam.service;
 
 import com.example.exam.dto.PatientDTO;
+import com.example.exam.dto.ReportPatientDTO;
 import com.example.exam.model.Patient;
 import com.example.exam.mapper.PatientMapper;
 import com.example.exam.repository.PatientRepository;
@@ -29,6 +30,12 @@ public class PatientService {
     public PatientDTO getPatientById(Long id) {
         Optional<Patient> optional = repository.findById(id);
         return optional.map(mapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
+    }
+
+    public ReportPatientDTO getReportById(Long id) {
+        return repository.findById(id)
+                .map(mapper::toReportDTO)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
     }
 
