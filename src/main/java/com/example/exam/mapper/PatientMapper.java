@@ -3,33 +3,25 @@ package com.example.exam.mapper;
 import com.example.exam.dto.PatientDTO;
 import com.example.exam.dto.ReportPatientDTO;
 import com.example.exam.model.Patient;
-import org.springframework.stereotype.Component;
+import org.mapstruct.factory.Mappers;
+import org.mapstruct.*;
 
 import java.time.format.DateTimeFormatter;
 
-@Component
-public class PatientMapper {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+@Mapper(componentModel = "spring")
+public interface PatientMapper {
+    PatientMapper INSTANCE = Mappers.getMapper(PatientMapper.class);
 
-    public PatientDTO toDTO(Patient patient) {
-        return PatientDTO.builder()
-                .name(patient.getName())
-                .diagnosis(patient.getDiagnosis())
-                .build();
-    }
+    PatientDTO toPatientDTO(Patient patient); // Entity to DTO
 
-    public ReportPatientDTO toReportDTO(Patient patient) {
-        return ReportPatientDTO.builder()
-                .name(patient.getName())
-                .diagnosis(patient.getDiagnosis())
-                .createdAt(patient.getCreatedAt().format(FORMATTER))
-                .build();
-    }
+    Patient toPatient(PatientDTO dto); // DTO to Entity
 
-    public Patient fromDTO(PatientDTO dto) {
-        return Patient.builder()
-                .name(dto.getName())
-                .diagnosis(dto.getDiagnosis())
-                .build();
+    // mapping for ReportPatientDTO
+    @Mapping(target = "createdAt", expression = "java(formatDate(patient.getCreatedAt()))")
+    ReportPatientDTO toReportDTO(Patient patient);
+
+    default String formatDate(java.time.LocalDateTime dateTime) {
+        if (dateTime == null) return null;
+        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 }

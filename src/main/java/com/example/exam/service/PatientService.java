@@ -23,13 +23,13 @@ public class PatientService {
 
     public List<PatientDTO> getAllPatients() {
         return repository.findAll().stream()
-                .map(mapper::toDTO)
+                .map(mapper::toPatientDTO)
                 .collect(Collectors.toList());
     }
 
     public PatientDTO getPatientById(Long id) {
         Optional<Patient> optional = repository.findById(id);
-        return optional.map(mapper::toDTO)
+        return optional.map(mapper::toPatientDTO)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
     }
 
@@ -40,8 +40,7 @@ public class PatientService {
     }
 
     public PatientDTO createPatient(PatientDTO dto) {
-        Patient patient = mapper.fromDTO(dto);
-        Patient saved = repository.save(patient);
-        return mapper.toDTO(saved);
+        Patient saved = repository.save(mapper.toPatient(dto));
+        return mapper.toPatientDTO(saved);
     }
 }
